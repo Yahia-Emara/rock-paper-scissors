@@ -1,0 +1,27 @@
+body, div, ul{
+    background-color: #F3F4F6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.play-buttons{
+    gap: 0.5em;
+}
+.play-button{
+    background-color: #2563EB;
+    color: #F1F5F9;
+    font-size: clamp(1rem, 2.5vw, 2rem);
+    padding: 0.3em 0.8em;     
+    border-radius: 0.7em;     
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.15s ease, transform 0.15s ease;
+    &:hover{
+        background-color: #1D4ED8;
+        transform: scale(1.035) translateY(-2.5px);
+    }
+    &:active {
+        background-color: #1E40AF;
+        transform: scale(0.97);
+    }
+}
