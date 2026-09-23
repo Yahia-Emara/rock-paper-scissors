@@ -60,8 +60,3 @@ function playGame(){
     }
     return capitalize(prompt('Play Again?', 'Yes'));
 }
-let userChoice = prompt('Play Rock Paper Scissors?', 'Yes');
-userChoice = capitalize(userChoice);
-if(userChoice === 'Yes'){
-    while(playGame() === 'Yes');
-}
