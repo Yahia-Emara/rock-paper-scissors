@@ -9,54 +9,85 @@ function getBotChoice(){
     return choices[botChoice];
 }
 
-function capitalize(word){
-    return word.slice(0,1).toUpperCase() + word.slice(1).toLowerCase();
+function typeText(textElement, text, typingSpeed = 40) {
+    let index = 0;
+    function work(){
+        if (index < text.length) {
+            textElement.textContent += text[index];
+            index++;
+            setTimeout(work, typingSpeed);
+        }
+    }
+    setTimeout(work, 100);
 }
 
-function getUserChoice(){
-    let userChoice = prompt("Make your move!", 'Rock');
-    userChoice = capitalize(userChoice);
-    return userChoice;
+function startGame(){
+    const gameCard = document.querySelector(".game-card");
+    gameCard.style.alignItems = "";
+    gameCard.innerHTML = 
+            `<div class="players">
+                <div class="user">
+                    <ul class="scores">
+                        <li class="score-dot"></li>
+                        <li class="score-dot"></li>
+                        <li class="score-dot"></li>
+                        <li class="score-dot"></li>
+                        <li class="score-dot"></li>
+                    </ul>
+                    <div class="move-card"></div>
+                    <p class="move-desc"></p>
+                </div>
+                <div class="log">
+                    
+                </div>
+                <div class="bot">
+                    <ul class="scores">
+                        <li class="score-dot"></li>
+                        <li class="score-dot"></li>
+                        <li class="score-dot"></li>
+                        <li class="score-dot"></li>
+                        <li class="score-dot"></li>
+                    </ul>
+                    <div class="move-card"></div>
+                    <p class="move-desc"></p>
+                </div>
+            </div>
+            <div class="play-buttons">
+                <button>✊ Rock</button>
+                <button>✋ Paper</button>
+                <button>✌️ Scissors</button>
+            </div>`;
+    playGame();
 }
 
 function playGame(){
     let userScore = 0;
     let botScore = 0;
-    function playRound(userChoice, botChoice){
-        let enumerate = (str) => {
-            if(str == 'Rock')return 0;
-            if(str == 'Paper')return 1;
-            if(str == 'Scissors')return 2;   
-        }
-        let userChoiceNumber = enumerate(userChoice);
-        let botChoiceNumber = enumerate(botChoice);
-        alert(`You chose: ${userChoice}`);
-        alert(`Your opponent chose: ${botChoice}`);
-        if(userChoiceNumber === botChoiceNumber){
-            alert("It's a Draw!");
-        }
-        if(userChoiceNumber === (botChoiceNumber + 1) % 3){
-            alert(`You Win! ${userChoice} beats ${botChoice}`);
-            userScore++;
-        }
-        else if(botChoiceNumber === (userChoiceNumber + 1) % 3){
-            alert(`You Lose! ${botChoice} beats ${userChoice}`);
-            botScore++;
-        }
-    }
-    for(let i=0; i<5; i++){
-        playRound(getUserChoice(), getBotChoice());
-    }
-    alert(`Your score: ${userScore}`);
-    alert(`Your opponent's score: ${botScore}`);
-    if(userScore > botScore){
-        alert(`You Win the game!`);
-    }
-    else if(userScore < botScore){
-        alert(`You Lose the game!`);
-    }
-    else if(userChoice === botScore){
-        alert(`The game is a Draw!`);
-    }
-    return capitalize(prompt('Play Again?', 'Yes'));
+    const log = document.querySelector(".log");
+    typeText(log, "Make your move!");
+    log.
 }
+
+function reset(){
+    const playButton = document.createElement("button");
+    playButton.classList.toggle("start-button");
+    playButton.textContent = "Play";
+    Object.assign(playButton.style, {
+        fontSize: "5rem"
+    });
+    const gameCard = document.querySelector(".game-card");
+    gameCard.replaceChildren(playButton);
+    Object.assign(gameCard.style, {
+        alignItems: "center"
+    });
+}
+
+addEventListener("click", (e) => {
+    const button = e.target.closest("button");
+    if(button === null) return;
+    if(button.matches(".start-button")){
+        return startGame();
+    }
+});
+
+reset();

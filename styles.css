@@ -16,7 +16,7 @@ html, body {
 }
 
 body {
-    background-color: rgb(13, 17, 23);
+    background-color: hsl(145, 98%, 70%);
     min-height: 100vh;
 }
 
@@ -44,9 +44,21 @@ header h1 {
     margin: 0;
 }
 
+#rock {
+    color: grey;
+}
+
+#paper {
+    color: white;
+}
+
+#scissors {
+    color: red;
+}
+
 .game-card {
     width: 100%;
-    background-color: #9050f1;
+    background-color: skyblue;
     border-radius: 4rem;
     padding: 2rem;
     display: flex;
@@ -70,25 +82,39 @@ header h1 {
 .user, .bot {
     display: flex;
     flex-direction: column;
-    flex: 2;
-    gap: 2rem;
+    flex: 1;
+    gap: 1rem;
 }
 
-.results {
-    flex: 1;
+.log {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 2;
+    color: black;
 }
 
 .scores {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
 .score-dot {
-    border-radius: 0.5rem;
+    border-radius: 0.3rem;
     aspect-ratio: 1 / 1;
-    width: 3rem;
+    width: 1.5rem;
     background-color: white;
 }
+
+.user .score-dot.activated {
+    background-color: red;
+}
+
+.bot .score-dot.activated {
+    background-color: blue;
+}
+
 
 .move-card {
     background-color: aliceblue;
@@ -96,6 +122,15 @@ header h1 {
     margin: 1px;
     max-height: 80%;
     aspect-ratio: 1 / 1;
+}
+
+
+.move-desc {
+    color: black;
+    font-size: 2rem;
+    font-weight: bold;
+    align-self: center;
+    margin-top: -1rem;
 }
 
 .play-buttons {
@@ -111,7 +146,7 @@ header h1 {
 button {
     background-color: #2563EB;
     color: #F1F5F9;
-    font-size: clamp(1rem, 2.5vw, 2rem);
+    font-size: 2rem;
     padding: 0.3em 0.8em;     
     border-radius: 0.7em;     
     border: none;
