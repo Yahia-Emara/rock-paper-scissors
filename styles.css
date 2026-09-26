@@ -107,6 +107,14 @@ header h1 {
     aspect-ratio: 1 / 1;
     width: 1.5rem;
     background-color: white;
+    transition: background-color 0.5s ease;
+}
+
+.move-card {
+    font-size: 10rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .user .score-dot.activated {

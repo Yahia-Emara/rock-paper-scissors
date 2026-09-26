@@ -41,9 +41,17 @@ function startGame(){
 
 async function playGame(){
     const moves = ['rock', 'paper', 'scissors'];
+    const movesEmo = ['✊', '✋', '✌️'];
+    
     let userScore = 0;
     let botScore = 0;
     const logNode = document.querySelector(".log");
+    const userMoveDesc = document.querySelector(".user .move-desc");
+    const userMoveCard = document.querySelector(".user .move-card");
+    const botMoveDesc = document.querySelector(".bot .move-desc");
+    const botMoveCard = document.querySelector(".bot .move-card");
+    const userScores = document.querySelector(".user .scores");
+    const botScores = document.querySelector(".bot .scores");
     function log(message, append = true, wait = true, typingDelay = 40){   
         return Utils.typeText(logNode, message, append, wait, typingDelay);
     }   
@@ -51,12 +59,20 @@ async function playGame(){
         await playRound();
     }
     async function playRound(){
-        log('Make your move!');
+        await log('Make your move!');
+        userMoveDesc.textContent = ' ';
+        userMoveCard.textContent = ' ';
+        botMoveDesc.textContent = ' ';
+        botMoveCard.textContent = ' ';
         const userChoice = await Utils.waitForUserChoice();
+        userMoveDesc.textContent = moves[userChoice];
+        userMoveCard.textContent = movesEmo[userChoice];
         console.log("playing...");
+        await log("Awaiting bot choice", false);
+        await log("... ", true, true, 400);
         const botChoice = Utils.randInt(0,2);
-        log("Awaiting bot choice", false);
-        log("... ", true, true, 400);
+        botMoveDesc.textContent = moves[botChoice];
+        botMoveCard.textContent = movesEmo[botChoice];
         let diff = (userChoice - botChoice + 3) % 3;
         switch(diff){
             case 0:
@@ -64,16 +80,24 @@ async function playGame(){
                 break;
             case 1:
                 log(`${moves[userChoice]} beats ${moves[botChoice]}! You WIN this round!`);
+                userScores.children[userScore].classList.toggle("activated");
                 userScore++;
                 break;
             case 2:
                 log(`${moves[botChoice]} beats ${moves[userChoice]}! You LOSE this round!`);
+                botScores.children[botScore].classList.toggle("activated");
                 botScore++;
                 break;
         }
         await log(', ');
     }
-
+    
+    if(userScore === 5){
+        log("You Win!");
+    }
+    if(botScore === 5){
+        log("You Lose!");
+    }
 }
 
 function reset(){
