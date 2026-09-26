@@ -1,25 +1,4 @@
-function randInt(l, r){
-    let range = r+1-l;
-    return l + Math.floor(Math.random()*range);
-}
-
-function getBotChoice(){
-    let choices = ['Rock', 'Paper', 'Scissors'];
-    let botChoice = randInt(0,2);
-    return choices[botChoice];
-}
-
-function typeText(textElement, text, typingSpeed = 40) {
-    let index = 0;
-    function work(){
-        if (index < text.length) {
-            textElement.textContent += text[index];
-            index++;
-            setTimeout(work, typingSpeed);
-        }
-    }
-    setTimeout(work, 100);
-}
+import * as Utils from './utils.js';
 
 function startGame(){
     const gameCard = document.querySelector(".game-card");
@@ -53,19 +32,46 @@ function startGame(){
                 </div>
             </div>
             <div class="play-buttons">
-                <button>✊ Rock</button>
-                <button>✋ Paper</button>
-                <button>✌️ Scissors</button>
+                <button id="play-rock">✊ Rock</button>
+                <button id="play-paper">✋ Paper</button>
+                <button id="play-scissors">✌️ Scissors</button>
             </div>`;
     playGame();
 }
-
-function playGame(){
+async function playGame(){
+    const moves = ['rock', 'paper', 'scissors'];
     let userScore = 0;
     let botScore = 0;
-    const log = document.querySelector(".log");
-    typeText(log, "Make your move!");
-    log.
+    const logNode = document.querySelector(".log");
+    function log(message, append = true, wait = true, typingDelay = 40){   
+        Utils.typeText(logNode, message, append, wait, typingDelay);
+    }   
+    while(userScore < 5 && botScore < 5){
+        log('Make your move!');
+        const userChoice = await Utils.waitForUserChoice();
+        const botChoice = Utils.randInt(0,2);
+        playRound(userChoice, botChoice);
+    }
+    function playRound(userChoice, botChoice){
+        log("Awaiting bot choice", false);
+        log("...\n", true, true, 400);
+        let diff = (userChoice - botChoice + 3) % 3;
+        switch(diff){
+            case 0:
+                log("It's a TIE!");
+                break;
+            case 1:
+                log(`${moves[userChoice]} beats ${moves[botChoice]}!\nYou WIN this round!`);
+                userScore++;
+                break;
+            case 2:
+                log(`${moves[botChoice]} beats ${moves[userChoice]}!\nYou LOSE this round!`);
+                botScore++;
+                break;
+        }
+        log('\n');
+    }
+
 }
 
 function reset(){
@@ -87,6 +93,15 @@ addEventListener("click", (e) => {
     if(button === null) return;
     if(button.matches(".start-button")){
         return startGame();
+    }
+    if(button.matches("#play-rock")) {
+        if(Utils.activeChoiceResolver !== null) return Utils.activeChoiceResolver(0);
+    }
+    if(button.matches("#play-paper")) {
+        if(Utils.activeChoiceResolver !== null) return Utils.activeChoiceResolver(1);
+    }
+    if(button.matches("#play-scissors")) {
+        if(Utils.activeChoiceResolver !== null) return Utils.activeChoiceResolver(2);
     }
 });
 
