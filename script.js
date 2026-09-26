@@ -38,38 +38,40 @@ function startGame(){
             </div>`;
     playGame();
 }
+
 async function playGame(){
     const moves = ['rock', 'paper', 'scissors'];
     let userScore = 0;
     let botScore = 0;
     const logNode = document.querySelector(".log");
     function log(message, append = true, wait = true, typingDelay = 40){   
-        Utils.typeText(logNode, message, append, wait, typingDelay);
+        return Utils.typeText(logNode, message, append, wait, typingDelay);
     }   
     while(userScore < 5 && botScore < 5){
+        await playRound();
+    }
+    async function playRound(){
         log('Make your move!');
         const userChoice = await Utils.waitForUserChoice();
+        console.log("playing...");
         const botChoice = Utils.randInt(0,2);
-        playRound(userChoice, botChoice);
-    }
-    function playRound(userChoice, botChoice){
         log("Awaiting bot choice", false);
-        log("...\n", true, true, 400);
+        log("... ", true, true, 400);
         let diff = (userChoice - botChoice + 3) % 3;
         switch(diff){
             case 0:
                 log("It's a TIE!");
                 break;
             case 1:
-                log(`${moves[userChoice]} beats ${moves[botChoice]}!\nYou WIN this round!`);
+                log(`${moves[userChoice]} beats ${moves[botChoice]}! You WIN this round!`);
                 userScore++;
                 break;
             case 2:
-                log(`${moves[botChoice]} beats ${moves[userChoice]}!\nYou LOSE this round!`);
+                log(`${moves[botChoice]} beats ${moves[userChoice]}! You LOSE this round!`);
                 botScore++;
                 break;
         }
-        log('\n');
+        await log(', ');
     }
 
 }
@@ -94,15 +96,10 @@ addEventListener("click", (e) => {
     if(button.matches(".start-button")){
         return startGame();
     }
-    if(button.matches("#play-rock")) {
-        if(Utils.activeChoiceResolver !== null) return Utils.activeChoiceResolver(0);
-    }
-    if(button.matches("#play-paper")) {
-        if(Utils.activeChoiceResolver !== null) return Utils.activeChoiceResolver(1);
-    }
-    if(button.matches("#play-scissors")) {
-        if(Utils.activeChoiceResolver !== null) return Utils.activeChoiceResolver(2);
-    }
+    if(button.matches("#play-rock")) return Utils.handleChoice(0);
+    if(button.matches("#play-paper")) return Utils.handleChoice(1);
+    if(button.matches("#play-scissors")) return Utils.handleChoice(2);
+    
 });
 
 reset();

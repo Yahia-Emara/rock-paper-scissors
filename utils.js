@@ -97,3 +97,9 @@ export let activeChoiceResolver = null;
 export function waitForUserChoice(){
     return new Promise((resolve) => {activeChoiceResolver = resolve;});
 }
+export function handleChoice(choice) {
+    if (activeChoiceResolver) {
+        activeChoiceResolver(choice);
+        activeChoiceResolver = null;
+    }
+}
